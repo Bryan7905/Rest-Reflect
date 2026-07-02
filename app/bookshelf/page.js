@@ -64,10 +64,10 @@ export default async function BookshelfPage() {
 
       {/* Index Cards Grid Layout */}
       {quotes.length === 0 ? (
-        <div className="text-center py-20 bg-white/40 border border-white/20 rounded-3xl backdrop-blur-sm max-w-lg mx-auto w-full">
-          <BookOpen className="w-12 h-12 text-stone-300 mx-auto mb-4" strokeWidth={1} />
-          <p className="text-stone-500 font-serif italic text-lg">Your bookshelf is empty.</p>
-          <p className="text-stone-400 text-xs mt-1">Add a quote above to begin filling your library.</p>
+        <div className="text-center py-20 bg-white/40 border border-white/20 dark:bg-zinc-800/20 dark:border-zinc-800/40 rounded-3xl backdrop-blur-sm max-w-lg mx-auto w-full">
+          <BookOpen className="w-12 h-12 text-stone-300 dark:text-zinc-600 mx-auto mb-4" strokeWidth={1} />
+          <p className="text-stone-550 dark:text-zinc-200 font-serif italic text-lg">Your bookshelf is empty.</p>
+          <p className="text-stone-400 dark:text-zinc-400 text-xs mt-1">Add a quote above to begin filling your library.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

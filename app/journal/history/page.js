@@ -55,17 +55,17 @@ export default async function JournalHistoryPage() {
           <div className="flex gap-6 bg-white/60 backdrop-blur-md border border-white/40 shadow-md rounded-2xl p-4 sm:p-5">
             <div className="text-center px-4">
               <span className="block text-[10px] uppercase tracking-wider text-stone-400 font-semibold mb-1">Total Entries</span>
-              <span className="text-2xl font-serif text-stone-800">{totalEntries}</span>
+              <span className="text-2xl font-serif text-stone-800 dark:text-zinc-100">{totalEntries}</span>
             </div>
-            <div className="w-[1px] bg-stone-200/60" />
+            <div className="w-[1px] bg-stone-200/60 dark:bg-zinc-800" />
             <div className="text-center px-4">
               <span className="block text-[10px] uppercase tracking-wider text-stone-400 font-semibold mb-1">Avg Physical</span>
-              <span className="text-2xl font-serif text-emerald-600">{avgPhysical} <span className="text-xs text-stone-450">/ 5</span></span>
+              <span className="text-2xl font-serif text-emerald-600 dark:text-emerald-400">{avgPhysical} <span className="text-xs text-stone-400 dark:text-zinc-500">/ 5</span></span>
             </div>
-            <div className="w-[1px] bg-stone-200/60" />
+            <div className="w-[1px] bg-stone-200/60 dark:bg-zinc-800" />
             <div className="text-center px-4">
               <span className="block text-[10px] uppercase tracking-wider text-stone-400 font-semibold mb-1">Avg Mental</span>
-              <span className="text-2xl font-serif text-emerald-600">{avgMental} <span className="text-xs text-stone-450">/ 5</span></span>
+              <span className="text-2xl font-serif text-emerald-600 dark:text-emerald-400">{avgMental} <span className="text-xs text-stone-400 dark:text-zinc-500">/ 5</span></span>
             </div>
           </div>
         )}

@@ -26,11 +26,11 @@ export default function JournalPage() {
           <input type="hidden" name="promptUsed" value={selectedPrompt} />
 
           {/* Inspirational Prompt Indicator */}
-          <div className="bg-emerald-50/40 border border-emerald-100/50 rounded-2xl p-4 flex gap-3 items-start">
-            <Sparkles className="w-5 h-5 text-emerald-600/70 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
+          <div className="bg-emerald-50/40 border border-emerald-100/50 dark:bg-emerald-950/20 dark:border-emerald-900/30 rounded-2xl p-4 flex gap-3 items-start">
+            <Sparkles className="w-5 h-5 text-emerald-600/70 dark:text-emerald-400 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
             <div className="space-y-1">
-              <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700/70">Reflection Prompt</span>
-              <p className="text-stone-600 text-sm font-serif italic">{selectedPrompt}</p>
+              <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700/70 dark:text-emerald-450">Reflection Prompt</span>
+              <p className="text-stone-600 dark:text-stone-300 text-sm font-serif italic">{selectedPrompt}</p>
             </div>
           </div>
 
