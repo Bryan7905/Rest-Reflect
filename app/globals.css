@@ -4,6 +4,36 @@
 :root {
   --background: #fbf9f6;
   --foreground: #2d2a26;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(255, 255, 255, 0.4);
+  --text-stone-800: #292524;
+  --text-stone-700: #44403c;
+  --text-stone-600: #57534e;
+  --text-stone-500: #78716c;
+  --text-stone-400: #a8a29e;
+  --shadow-color: rgba(230, 225, 215, 0.6);
+  --orb-amber: rgba(254, 243, 199, 0.3);
+  --orb-emerald: rgba(236, 253, 245, 0.2);
+  --orb-peach: rgba(255, 237, 213, 0.1);
+  --input-bg: #f5f5f4;
+}
+
+/* Dark Mode color mapping tokens */
+.dark {
+  --background: #121210;
+  --foreground: #f4f4f5;
+  --card-bg: rgba(24, 24, 27, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text-stone-800: #f4f4f5;
+  --text-stone-700: #e4e4e7;
+  --text-stone-600: #d4d4d8;
+  --text-stone-500: #a1a1aa;
+  --text-stone-400: #71717a;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --orb-amber: rgba(180, 83, 9, 0.15);
+  --orb-emerald: rgba(4, 120, 87, 0.12);
+  --orb-peach: rgba(194, 65, 12, 0.08);
+  --input-bg: #1f1f22;
 }
 
 @theme inline {
@@ -17,4 +47,62 @@ body {
   color: var(--foreground);
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Connect utility classes to custom layout properties for full dark mode support */
+.bg-white\/70 {
+  background-color: var(--card-bg) !important;
+}
+.border-white\/40 {
+  border-color: var(--card-border) !important;
+}
+.bg-white\/50 {
+  background-color: var(--card-bg) !important;
+}
+.bg-stone-50 {
+  background-color: var(--input-bg) !important;
+}
+.border-stone-150 {
+  border-color: var(--card-border) !important;
+}
+.shadow-\[0_20px_50px_rgba\(230\225\215\0\.6\)\] {
+  box-shadow: 0 20px 50px var(--shadow-color) !important;
+}
+.shadow-\[0_15px_35px_rgba\(230\225\215\0\.4\)\] {
+  box-shadow: 0 15px 35px var(--shadow-color) !important;
+}
+.shadow-\[0_15px_40px_rgba\(230\225\215\0\.5\)\] {
+  box-shadow: 0 15px 40px var(--shadow-color) !important;
+}
+
+/* Soft text overrides for dark mode readability */
+.text-stone-800, .text-stone-850 {
+  color: var(--text-stone-800) !important;
+}
+.text-stone-700 {
+  color: var(--text-stone-700) !important;
+}
+.text-stone-600, .text-stone-550 {
+  color: var(--text-stone-600) !important;
+}
+.text-stone-500 {
+  color: var(--text-stone-500) !important;
+}
+.text-stone-400 {
+  color: var(--text-stone-400) !important;
+}
+.placeholder-stone-300::placeholder {
+  color: var(--text-stone-400) !important;
+}
+
+/* Energetic blurred backgrounds dark mode mappings */
+.from-amber-100\/30 {
+  --tw-gradient-from: var(--orb-amber) !important;
+}
+.from-emerald-50\/20 {
+  --tw-gradient-from: var(--orb-emerald) !important;
+}
+.from-peach-100\/10 {
+  --tw-gradient-from: var(--orb-peach) !important;
 }
