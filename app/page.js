@@ -2,7 +2,7 @@ import prisma from '@/lib/prisma.js';
 import Link from 'next/link';
 import { Heart, Compass, PenTool, BookOpen } from 'lucide-react';
 
-export const revalidate = 0; // Don't cache, show dynamic quotes
+export const revalidate = 86400; // Cache quote for 24 hours (86400 seconds) so it changes daily
 
 export default async function Home() {
   let selectedQuote = {
@@ -12,22 +12,54 @@ export default async function Home() {
   };
 
   try {
-    const user = await prisma.user.findFirst({
-      where: { email: 'gf@sanctuary.com' }
+    // Fetch a random quote from the Prayush Adhikari Quotes API
+    const response = await fetch('https://quotesapi.prayushadhikari.com.np/api/quotes/random?limit=1', {
+      next: { revalidate: 86400 } // Fetch cache parameters verification
     });
 
-    if (user) {
-      const quotes = await prisma.quote.findMany({
-        where: { userId: user.id }
-      });
-
-      if (quotes.length > 0) {
-        const randomIndex = Math.floor(Math.random() * quotes.length);
-        selectedQuote = quotes[randomIndex];
+    if (response.ok) {
+      const data = await response.json();
+      // Inspect payload array mapping structure
+      if (Array.isArray(data) && data.length > 0) {
+        selectedQuote = {
+          quoteText: data[0].quote || data[0].text || data[0].quoteText,
+          author: data[0].author || "Unknown",
+          bookTitle: data[0].book || "Literature Library"
+        };
+      } else if (data && data.quote) {
+        selectedQuote = {
+          quoteText: data.quote,
+          author: data.author || "Unknown",
+          bookTitle: data.book || "Literature Library"
+        };
       }
     }
   } catch (error) {
-    console.error("Failed to load quotes, using fallback", error);
+    console.error("Failed to load quote from Prayush Adhikari API, trying DB fallback...", error);
+    
+    // DB Fallback
+    try {
+      const user = await prisma.user.findFirst({
+        where: { email: 'gf@sanctuary.com' }
+      });
+
+      if (user) {
+        const quotes = await prisma.quote.findMany({
+          where: { userId: user.id }
+        });
+
+        if (quotes.length > 0) {
+          const randomIndex = Math.floor(Math.random() * quotes.length);
+          selectedQuote = {
+            quoteText: quotes[randomIndex].quoteText,
+            author: quotes[randomIndex].author,
+            bookTitle: quotes[randomIndex].bookTitle
+          };
+        }
+      }
+    } catch (dbError) {
+      console.error("Fallback quote retrieve failed", dbError);
+    }
   }
 
   return (
