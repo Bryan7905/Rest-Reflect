@@ -47,13 +47,17 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
-        {/* Enforce light mode on initial page load by resetting dark utility class */}
+        {/* Check saved theme preference on initial load (defaults to light mode if not set) */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('sanctuary_theme', 'light');
+                const savedTheme = localStorage.getItem('sanctuary_theme');
+                if (savedTheme === 'dark') {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
               } catch (_) {}
             `,
           }}

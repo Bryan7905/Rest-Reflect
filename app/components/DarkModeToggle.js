@@ -6,12 +6,21 @@ import { Sun, Moon } from 'lucide-react';
 export default function DarkModeToggle() {
   const [theme, setTheme] = useState('light');
 
-  // Load saved theme choice (default to light mode on every page load / session restart)
+  // Load saved theme choice (initialize with local storage preference, defaulting to light mode on first load)
   useEffect(() => {
-    // Force clean light mode on layout mounts
-    setTheme('light');
-    document.documentElement.classList.remove('dark');
-    localStorage.setItem('sanctuary_theme', 'light');
+    const savedTheme = localStorage.getItem('sanctuary_theme');
+    
+    if (savedTheme === 'dark') {
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
+    } else {
+      // Default to light mode when first loaded or if light mode is selected
+      setTheme('light');
+      document.documentElement.classList.remove('dark');
+      if (!savedTheme) {
+        localStorage.setItem('sanctuary_theme', 'light');
+      }
+    }
   }, []);
 
   const toggleTheme = () => {
