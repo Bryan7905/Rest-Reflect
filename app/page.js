@@ -2,7 +2,7 @@ import prisma from '@/lib/prisma.js';
 import Link from 'next/link';
 import { Heart, Compass, PenTool, BookOpen } from 'lucide-react';
 
-export const revalidate = 86400; // Cache quote for 24 hours (86400 seconds) so it changes daily
+export const revalidate = 0; // Set revalidate to 0 to bypass caching and load fresh quotes on every page load
 
 export default async function Home() {
   let selectedQuote = {
@@ -12,14 +12,13 @@ export default async function Home() {
   };
 
   try {
-    // Fetch a random quote from the Prayush Adhikari Quotes API
+    // Fetch quote dynamically on every load. Setting cache: 'no-store' forces dynamic fetching
     const response = await fetch('https://quotesapi.prayushadhikari.com.np/api/quotes/random?limit=1', {
-      next: { revalidate: 86400 } // Fetch cache parameters verification
+      cache: 'no-store'
     });
 
     if (response.ok) {
       const data = await response.json();
-      // Inspect payload array mapping structure
       if (Array.isArray(data) && data.length > 0) {
         selectedQuote = {
           quoteText: data[0].quote || data[0].text || data[0].quoteText,
