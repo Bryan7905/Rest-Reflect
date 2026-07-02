@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  password  String     @default("")
+  role      String     @default("user")
+  createdAt DateTime   @default(now())
+  entries   Entry[]
+  quotes    Quote[]
+  loveNotes LoveNote[]
+}
+
+model Entry {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  content        String
+  promptUsed     String?
+  physicalEnergy Int
+  mentalEnergy   Int
+}
+
+model Quote {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  bookTitle    String
+  author       String   @default("Joena San Diego")
+  quoteText    String
+  personalNote String?
+  isPrivate    Boolean  @default(true)
+}
+
+model LoveNote {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  message     String
+  isRead      Boolean  @default(false)
+  unlockDate  DateTime @default(now())
+}

@@ -1,65 +1,106 @@
-import Image from "next/image";
+import prisma from '@/lib/prisma.js';
+import Link from 'next/link';
+import { Heart, Compass, PenTool, BookOpen } from 'lucide-react';
 
-export default function Home() {
+export const revalidate = 0; // Don't cache, show dynamic quotes
+
+export default async function Home() {
+  let selectedQuote = {
+    quoteText: "Rest is not a waste of time. It is an act of trust.",
+    author: "Joena San Diego",
+    bookTitle: "Quiet Moments"
+  };
+
+  try {
+    const user = await prisma.user.findFirst({
+      where: { email: 'gf@sanctuary.com' }
+    });
+
+    if (user) {
+      const quotes = await prisma.quote.findMany({
+        where: { userId: user.id }
+      });
+
+      if (quotes.length > 0) {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        selectedQuote = quotes[randomIndex];
+      }
+    }
+  } catch (error) {
+    console.error("Failed to load quotes, using fallback", error);
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="max-w-4xl mx-auto px-6 py-12 flex flex-col items-center justify-center flex-1">
+      {/* Peace Greeting Header */}
+      <div className="text-center mb-16 space-y-3">
+        <h1 className="text-3xl sm:text-4xl font-serif text-stone-800 tracking-wide">
+          Welcome back to your quiet space.
+        </h1>
+        <p className="text-stone-500 max-w-md mx-auto text-sm sm:text-base font-light">
+          Take a deep breath. This is a sanctuary built just for you, to rest, reflect, and gather strength.
+        </p>
+      </div>
+
+      {/* Centerpiece Quote Card */}
+      <div className="w-full max-w-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-[0_20px_50px_rgba(230,225,215,0.6)] rounded-3xl p-8 sm:p-12 mb-16 transform transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_60px_rgba(230,225,215,0.7)] group relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+          <Heart className="w-16 h-16 text-emerald-600" strokeWidth={1} />
+        </div>
+        
+        <blockquote className="space-y-6">
+          <p className="font-serif text-stone-700 text-xl sm:text-2xl leading-relaxed text-center italic">
+            &ldquo;{selectedQuote.quoteText}&rdquo;
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          <footer className="text-center">
+            <cite className="not-italic block text-sm font-medium text-stone-500 uppercase tracking-widest">
+              — {selectedQuote.author}
+            </cite>
+            {selectedQuote.bookTitle && (
+              <span className="text-xs text-stone-400 font-serif italic mt-1 block">
+                from {selectedQuote.bookTitle}
+              </span>
+            )}
+          </footer>
+        </blockquote>
+      </div>
+
+      {/* Core Action Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full max-w-2xl">
+        <Link href="/journal" className="group">
+          <div className="h-full bg-white/50 backdrop-blur-sm hover:bg-white/80 border border-white/40 hover:border-emerald-100/50 shadow-[0_15px_35px_rgba(230,225,215,0.4)] rounded-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(220,215,205,0.5)] flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div className="p-3 bg-emerald-50 rounded-xl w-fit text-emerald-600/80 group-hover:scale-110 transition-transform">
+                <PenTool className="w-6 h-6" strokeWidth={1.5} />
+              </div>
+              <h3 className="font-serif text-lg text-stone-800">Gentle Journal</h3>
+              <p className="text-stone-500 text-sm font-light leading-relaxed">
+                Release your thoughts. Note down your physical and mental energy levels without judgment.
+              </p>
+            </div>
+            <div className="text-xs font-semibold tracking-wider text-emerald-600/80 uppercase group-hover:translate-x-1 transition-transform flex items-center gap-1">
+              Begin Writing &rarr;
+            </div>
+          </div>
+        </Link>
+
+        <Link href="/bookshelf" className="group">
+          <div className="h-full bg-white/50 backdrop-blur-sm hover:bg-white/80 border border-white/40 hover:border-amber-100/50 shadow-[0_15px_35px_rgba(230,225,215,0.4)] rounded-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(220,215,205,0.5)] flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div className="p-3 bg-amber-50 rounded-xl w-fit text-amber-600/80 group-hover:scale-110 transition-transform">
+                <BookOpen className="w-6 h-6" strokeWidth={1.5} />
+              </div>
+              <h3 className="font-serif text-lg text-stone-800">Quiet Bookshelf</h3>
+              <p className="text-stone-500 text-sm font-light leading-relaxed">
+                Gather encouraging, faith-based quotes. A collection of beautiful thoughts to return to.
+              </p>
+            </div>
+            <div className="text-xs font-semibold tracking-wider text-amber-600/80 uppercase group-hover:translate-x-1 transition-transform flex items-center gap-1">
+              Browse Books &rarr;
+            </div>
+          </div>
+        </Link>
+      </div>
     </div>
   );
 }
